@@ -1,0 +1,86 @@
+- En Windows, abrir la terminal en el directorio del archivo (como administrador) e instala TypeScript de manera global, inclusive TypeScript Compiler (TSC)
+npm i -g typescript
+
+- Inicio proyecto de Node
+npm i -y
+
+- Creo un archivo .ts en la raiz, y escribo algo dentro de el. Por ejemplo:
+export const nombre = 'Juan Pablo';
+console.log(nombre);
+
+Si trato de ejecutarlo, no voy a poder. Por lo tanto, hay que realizar algunas configuraciones:
+
+- Creo el archivo de configuracion de TS para decirle al TSC como quiero que traduzca o compile la aplicacion de TS
+tsc --init
+
+-En este archivo realizo algunos cambios:
+"target": "es6
+"outDir": "./dist"
+"sourceMap": true (si sucede un error en JS, nos ayuda a encontrar el equivalente en TS)
+"moduleResolution": "node"
+
+- Ejecuto el TSC. De esta manera, cada vez que ejecute este comando, sera leido el archivo de configuracion de TS (tsconfig.json) y nos creara el app.js (dentro de la carpeta que pusimos en "outDir")tal cual es necesario para que se ejecute en node directamente
+tsc
+
+- Instalo TS Lint como una dependencia de desarrollo. Con esto puedo agregar nuevas reglas adicionales a las que tiene TS, para seguir los estandares de desarrollo.
+npm i tslint --save-dev
+
+- Para crear el archivo de configuracion de TS Lint, debo instalar de manera local al proyecto TS
+npm i typescript --save-dev
+
+- Creo archivo de configuracion del TS Lint (se crea tslint.json)
+./node_modules/.bin/tslint --init
+
+- Agrego dentro de este (para que no tire errores la consola):
+"rules" : {
+  "no-console": false
+}
+
+- Recordar que para iniciar el server:
+1) tsc
+2) node ./dist/app.js
+
+
+*--------------------------------------------------------------------------------------------------------*
+- Creo: models -> server.ts
+
+- Recordar que debo definir las propiedades de antemano siempre en TS.
+
+- Instalo express
+npm i express cors dotenv
+
+- En server.ts exporto express, lo cual me va a arrojar un error porque no se puede encontrar el archivo de declaracion para express. Por lo tanto, tengo que ayudar a TypeScript a que conozca los archivos. Me va a habilitar el tipado de express como si estuviera creado en TS
+npm i --save-dev @types/express
+
+- Para el numero de puerto, por ejemplo, creo un archivo .env con PORT=8080 y luego en app.ts importo dotnv
+import dotenv from 'dotenv';
+dotenv.config();
+
+- Compilo los archivos de TS a JS
+tsc
+
+- Instalo nodemon
+npm i --save-dev nodemon
+
+-Ejecuto nodemon
+npx nodemon [ruta del app.js]
+
+Abro otra terminal donde este TS (voy a tener 2: en una nodemon, en otra tsc)
+En una pongo -> tsc --watch
+En la otra -> npx nodemon [ruta del app.js]
+
+
+- Para poder recibir un body, debo implementar varios middlewares (para serializar el body, evita cors, etc)
+
+- Instalo Sequelize. Esto es un ORM (similar a mongoose), solamente que trabaja con bases de datos MySQL, MySQL Server, etc.
+npm install --save sequelize
+npm install --save mysql2
+
+
+Habilitar servicios de MSSQL:
+cmd -> compmgmt.msc
+Ir a: Servicios y aplicaciones -> SQL Server Configuration Manager -> SQL Server Network Configuration -> Protocols for MSSQLSERVER -> TCP/IP
+
+Tiene que estar "Enabled: Yes"
+
+Buscar el Servicio "SQL Browser". Ver si está.
